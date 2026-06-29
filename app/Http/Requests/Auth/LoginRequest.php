@@ -41,9 +41,13 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         // DEBUG
-      dd(
+     dd(
     $this->only('email', 'password'),
-    \App\Models\User::where('email', request('email'))->first()
+    User::where('email', $this->email)->first(),
+    \Illuminate\Support\Facades\Hash::check(
+        $this->password,
+        User::where('email', $this->email)->first()->password
+    )
 );
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
