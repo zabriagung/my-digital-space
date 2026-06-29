@@ -113,11 +113,23 @@
                 <td>{{ $m->nama }}</td>
                 <td>{{ $m->jurusan }}</td>
                 <td>{{ $m->ipk }}</td>
+    
                 <td>
-                    <a href="/mahasiswa/{{ $m->id }}/edit" class="btn btn-warning btn-sm">
-                     Edit
-                    </a>
-                </td>
+    <a href="/mahasiswa/{{ $m->id }}/edit" class="btn btn-warning btn-sm">
+        Edit
+    </a>
+
+    <form action="/mahasiswa/{{ $m->id }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+
+        <button type="submit"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Yakin ingin menghapus data ini?')">
+            Hapus
+        </button>
+    </form>
+</td>
             </tr>
             @endforeach
             </tbody>

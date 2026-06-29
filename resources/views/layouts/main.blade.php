@@ -12,184 +12,215 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Poppins', sans-serif;
+        body{
+            background:#f8f9fa;
+            font-family:'Poppins',sans-serif;
         }
 
-        /* Navbar */
-        .navbar {
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        .navbar{
+            box-shadow:0 2px 10px rgba(0,0,0,.05);
         }
 
-        .navbar-brand {
-            font-weight: 600;
-            color: #FF2D20 !important;
+        .navbar-brand{
+            font-weight:600;
+            color:#FF2D20 !important;
         }
 
-        .nav-link {
-            transition: 0.3s;
+        .nav-link{
+            transition:.3s;
         }
 
-        .nav-link:hover {
-            color: #FF2D20 !important;
+        .nav-link:hover{
+            color:#FF2D20 !important;
         }
 
-        /* ACTIVE MENU */
-        .nav-link.active {
-            color: #FF2D20 !important;
-            font-weight: 600;
+        .nav-link.active{
+            color:#FF2D20 !important;
+            font-weight:600;
         }
 
-        /* ANIMASI FADE IN */
-        .fade-in {
-            animation: fadeIn 0.8s ease-in;
+        .fade-in{
+            animation:fadeIn .8s ease-in;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+        @keyframes fadeIn{
+            from{
+                opacity:0;
+                transform:translateY(10px);
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            to{
+                opacity:1;
+                transform:translateY(0);
             }
         }
 
-        .card {
-            border-radius: 12px;
+        .card{
+            border-radius:12px;
+            transition:.3s;
         }
 
-        footer {
-            font-size: 14px;
+        .card:hover{
+            transform:translateY(-5px);
         }
 
-        /* ACCORDION STYLE */
-        .accordion-button {
-            font-weight: 600;
+        .card img{
+            height:200px;
+            object-fit:cover;
         }
 
-        .accordion-button:not(.collapsed) {
-            background-color: #FF2D20;
-            color: white;
+        footer{
+            font-size:14px;
         }
 
-        .accordion-button:focus {
-            box-shadow: none;
+        .accordion-button{
+            font-weight:600;
         }
 
-        .accordion-item {
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 10px;
-            transition: 0.3s;
+        .accordion-button:not(.collapsed){
+            background:#FF2D20;
+            color:#fff;
         }
 
-        .accordion-item:hover {
-            transform: scale(1.01);
+        .accordion-button:focus{
+            box-shadow:none;
         }
 
-        /* HOVER EFFECT ACCORDION */
-        .accordion-button {
-            transition: 0.3s;
+        .accordion-item{
+            border-radius:10px;
+            overflow:hidden;
+            margin-bottom:10px;
         }
 
-        .accordion-button:hover {
-            background-color: #ffe5e3;
-            color: #FF2D20;
+        .btn-danger{
+            background:#FF2D20;
+            border:none;
         }
 
-        /* HERO TEXT */
-        h1 {
-            letter-spacing: 1px;
-        }
-
-        /* BUTTON */
-        .btn-danger {
-            background-color: #FF2D20;
-            border: none;
-        }
-
-        .btn-danger:hover {
-            background-color: #e0261b;
-        }
-
-        .card img {
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .card {
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
+        .btn-danger:hover{
+            background:#e0261b;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">MyDigitalSpace</a>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+    <div class="container">
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <a class="navbar-brand" href="{{ route('home') }}">
+            MyDigitalSpace
+        </a>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-               <div class="navbar-nav ms-auto">
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <a class="nav-link {{ request()->is('beranda') ? 'active' : '' }}" href="/beranda">
-        Home
-    </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
 
-    <a class="nav-link {{ request()->is('about') ? 'active' : '' }}" href="/about">
-        About
-    </a>
+            <!-- Menu Kiri -->
+            <ul class="navbar-nav">
 
-    <a class="nav-link {{ request()->is('mahasiswa/create') ? 'active' : '' }}" href="/mahasiswa/create">
-        + Mahasiswa
-    </a>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
+                       href="{{ route('home') }}">
+                        Home
+                    </a>
+                </li>
 
-    <a class="nav-link {{ request()->is('buku/create') ? 'active' : '' }}" href="/buku/create">
-        + Buku
-    </a>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('about') ? 'active' : '' }}"
+                       href="/about">
+                        About
+                    </a>
+                </li>
 
-</div>
-            </div>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('mahasiswa/create') ? 'active' : '' }}"
+                       href="/mahasiswa/create">
+                        + Mahasiswa
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('buku/create') ? 'active' : '' }}"
+                       href="/buku/create">
+                        + Buku
+                    </a>
+                </li>
+
+            </ul>
+
+            <!-- Menu Kanan -->
+            <ul class="navbar-nav ms-auto">
+
+                @auth
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{ route('dashboard') }}">
+                            Dashboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+
+                            <button type="submit"
+                                    class="btn btn-link nav-link text-decoration-none">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+
+                @else
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{{ route('login') }}">
+                            Login
+                        </a>
+                    </li>
+
+                @endauth
+
+            </ul>
+
         </div>
-    </nav>
 
-    <!-- CONTENT + ANIMASI -->
-    <main class="container py-4 fade-in">
+    </div>
+</nav>
 
-        {{-- PESAN SUKSES (Langkah 6) --}}
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close"
-                        data-bs-dismiss="alert"
-                        aria-label="Close"></button>
-            </div>
-        @endif
+<!-- CONTENT -->
+<main class="container py-4 fade-in">
 
-        @yield('content')
-    </main>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('success') }}
 
-    <!-- FOOTER -->
-    <footer class="text-center mt-5 py-4 text-muted">
-        <hr>
-        <p class="mb-0">
-            &copy; {{ date('Y') }} MyDigitalSpace • Dibuat dengan Laravel 🚀
-        </p>
-    </footer>
+            <button class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    @endif
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @yield('content')
+
+</main>
+
+<!-- FOOTER -->
+<footer class="text-center mt-5 py-4 text-muted">
+    <hr>
+    <p class="mb-0">
+        &copy; {{ date('Y') }} MyDigitalSpace • Dibuat dengan Laravel 🚀
+    </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

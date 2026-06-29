@@ -3,47 +3,73 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\Project;
 
 class ProfileController extends Controller
 {
-   public function index(Request $request)
-{
-    $projects = Project::all();
+    // BERANDA
+    public function index()
+    {
+        $projects = Project::orderBy('created_at', 'desc')->get();
 
-    $pengunjung = $request->query('nama', 'Tamu');
-    $namaLengkap = "ZabriAgungPratama";
+        return view('welcome', [
+            'namaLengkap' => 'Agung Pratama',
+            'pengunjung' => 'Teknik Informatika',
+            'skills' => [
+                'HTML',
+                'CSS',
+                'JavaScript',
+                'PHP',
+                'Laravel'
+            ],
+            'projects' => $projects
+        ]);
+    }
 
-    $nim = "2455200229";
-    $tempat_lahir = "Pagaralam";
-    $alamat = "Nendagung";
-    $no_wa = "085866187963";
+    // PROFILE (Breeze)
+    public function edit(Request $request)
+    {
+        return view('profile.edit', [
+            'user' => $request->user(),
+        ]);
+    }
 
-    $skills = ['HTML', 'CSS', 'JavaScript', 'PHP', 'Laravel'];
+    public function update(Request $request)
+    {
+        $request->user()->fill(
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required|email',
+            ])
+        );
 
-    return view('beranda', compact(
-        'namaLengkap',
-        'pengunjung',
-        'skills',
-        'projects',
-        'nim',
-        'tempat_lahir',
-        'alamat',
-        'no_wa'
-    ));
-}
-public function mahasiswa()
-{
-    $mahasiswa = DB::table('mahasiswa')->get();
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
 
-    return view('mahasiswa', compact('mahasiswa'));
-}
+        $request->user()->save();
 
-public function buku()
-{
-    $buku = DB::table('buku')->get();
+        return Redirect::route('profile.edit')
+            ->with('status', 'profile-updated');
+    }
 
-    return view('buku', compact('buku'));
-}
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        Auth::logout();
+
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
+    }
 }

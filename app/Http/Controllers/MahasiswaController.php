@@ -41,6 +41,13 @@ class MahasiswaController extends Controller
         return redirect()->route('mahasiswa.index')
             ->with('success', 'Data Mahasiswa berhasil disimpan');
     }
+    public function destroyMahasiswa($id)
+{
+    DB::table('mahasiswa')->where('id', $id)->delete();
+
+    return redirect()->route('mahasiswa.index')
+        ->with('success', 'Data Mahasiswa berhasil dihapus');
+}
 
     // Menampilkan Form Edit Mahasiswa
     public function editMahasiswa($id)
@@ -107,6 +114,13 @@ class MahasiswaController extends Controller
         return redirect()->route('buku.index')
             ->with('success', 'Data Buku berhasil disimpan');
     }
+    public function destroyBuku($id)
+{
+    DB::table('buku')->where('id', $id)->delete();
+
+    return redirect()->route('buku.index')
+        ->with('success', 'Data Buku berhasil dihapus');
+}
 
     // Menampilkan Form Edit Buku
     public function editBuku($id)

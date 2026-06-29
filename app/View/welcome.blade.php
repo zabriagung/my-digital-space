@@ -142,6 +142,16 @@
                         class="btn btn-warning btn-sm">
                         Edit
                     </a>
+                    <form action="/projects/{{ $p->id }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+
+        <button type="submit"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Yakin ingin menghapus data ini?')">
+            Hapus
+        </button>
+    </form>
 
                 </div>
 

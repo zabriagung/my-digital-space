@@ -70,12 +70,22 @@
                     <td>{{ $b->penulis}}</td>
                     <td>{{ $b->tahun_terbit}}</td>
                     
-                
                 <td>
-                    <a href="/buku/{{ $b->id }}/edit" class="btn btn-warning btn-sm">
-                     Edit
-                    </a>
-                </td>
+    <a href="/buku/{{ $b->id }}/edit" class="btn btn-warning btn-sm">
+        Edit
+    </a>
+
+    <form action="/buku/{{ $b->id }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+
+        <button type="submit"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Yakin ingin menghapus data ini?')">
+            Hapus
+        </button>
+    </form>
+</td>
                 </tr>
                 @endforeach
             </tbody>

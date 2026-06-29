@@ -29,6 +29,7 @@ class ProjectController extends Controller
         ->with('success', 'Project baru berhasil ditambahkan!');
 }
 
+
     // 3. Menampilkan Form Edit
     public function edit($id)
     {
@@ -60,4 +61,21 @@ class ProjectController extends Controller
         return redirect('/')
             ->with('success', 'Project berhasil diperbarui!');
     }
+    public function destroy($id)
+{
+    $project = Project::findOrFail($id);
+
+    $project->delete();
+
+    return redirect('/')
+        ->with('success', 'Project berhasil dihapus!');
+}
+public function index()
+{
+    $all_projects = Project::orderBy('created_at', 'desc')->get();
+
+    return view('projects.index', [
+        'projects' => $all_projects
+    ]);
+}
 }
