@@ -1,3 +1,4 @@
+```php
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -15,11 +16,49 @@ Route::get('/', [ProfileController::class, 'index'])->name('home');
 
 /*
 |--------------------------------------------------------------------------
+| HALAMAN PUBLIK (TIDAK PERLU LOGIN)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/about', function () {
+    return view('about');
+});
+
+Route::get('/halo', function () {
+    return view('halo_mahasiswa');
+});
+
+Route::get('/hobi', function () {
+    return view('hobi');
+});
+
+/*
+|--------------------------------------------------------------------------
+| MAHASISWA & BUKU (BISA DILIHAT TANPA LOGIN)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/mahasiswa', [MahasiswaController::class, 'mahasiswa'])->name('mahasiswa.index');
+
+Route::get('/buku', [MahasiswaController::class, 'buku'])->name('buku.index');
+
+/*
+|--------------------------------------------------------------------------
 | ROUTE YANG HARUS LOGIN
 |--------------------------------------------------------------------------
 */
 
 Route::middleware('auth')->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------
@@ -36,11 +75,10 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | MAHASISWA
+    | MAHASISWA (CRUD)
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/mahasiswa', [MahasiswaController::class, 'mahasiswa'])->name('mahasiswa.index');
     Route::get('/mahasiswa/create', [MahasiswaController::class, 'createMahasiswa'])->name('mahasiswa.create');
     Route::post('/mahasiswa/store', [MahasiswaController::class, 'storeMahasiswa'])->name('mahasiswa.store');
     Route::get('/mahasiswa/{id}/edit', [MahasiswaController::class, 'editMahasiswa'])->name('mahasiswa.edit');
@@ -49,11 +87,10 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | BUKU
+    | BUKU (CRUD)
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/buku', [MahasiswaController::class, 'buku'])->name('buku.index');
     Route::get('/buku/create', [MahasiswaController::class, 'createBuku'])->name('buku.create');
     Route::post('/buku/store', [MahasiswaController::class, 'storeBuku'])->name('buku.store');
     Route::get('/buku/{id}/edit', [MahasiswaController::class, 'editBuku'])->name('buku.edit');
@@ -69,35 +106,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
 });
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD
+| AUTH
 |--------------------------------------------------------------------------
 */
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
-
-/*
-|--------------------------------------------------------------------------
-| HALAMAN UMUM
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/about', function () {
-    return view('about');
-});
-
-Route::get('/halo', function () {
-    return view('halo_mahasiswa');
-});
-
-Route::get('/hobi', function () {
-    return view('hobi');
-});
