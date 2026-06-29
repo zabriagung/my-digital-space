@@ -51,11 +51,7 @@ class LoginRequest extends FormRequest
             $this->boolean('remember')
         );
 
-        dd(
-            $login,
-            Auth::check(),
-            Auth::user()
-        );
+       
 
         if (! $login) {
             RateLimiter::hit($this->throttleKey());
