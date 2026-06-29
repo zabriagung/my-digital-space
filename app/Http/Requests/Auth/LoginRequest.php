@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
-
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
@@ -24,6 +23,8 @@ class LoginRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -35,22 +36,28 @@ class LoginRequest extends FormRequest
 
     /**
      * Attempt to authenticate the request's credentials.
+     *
+     * @throws ValidationException
      */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        // DEBUG
-     dd(
-    $this->only('email', 'password'),
-    User::where('email', $this->email)->first(),
-    \Illuminate\Support\Facades\Hash::check(
-        $this->password,
-        User::where('email', $this->email)->first()->password
-    )
-);
+        $login = Auth::attempt(
+            [
+                'email' => $this->email,
+                'password' => $this->password,
+            ],
+            $this->boolean('remember')
+        );
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        dd(
+            $login,
+            Auth::check(),
+            Auth::user()
+        );
+
+        if (! $login) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -63,6 +70,8 @@ class LoginRequest extends FormRequest
 
     /**
      * Ensure the login request is not rate limited.
+     *
+     * @throws ValidationException
      */
     public function ensureIsNotRateLimited(): void
     {
@@ -87,6 +96,8 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(
+            Str::lower($this->string('email')) . '|' . $this->ip()
+        );
     }
 }
